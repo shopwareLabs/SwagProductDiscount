@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="swag_discount.product_extension" class="SwagProductDiscount\ProductExtension">
+            <tag name="shopware.extension" bundle="product" />
+        </service>
+        <service id="swag_discount.cart.discount_collector" class="SwagProductDiscount\Cart\DiscountCollector">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware.swag_product_discount.repository" />
+            <tag name="cart.collector" />
+        </service>
+        <service id="swag_discount.cart.discount_processor" class="SwagProductDiscount\Cart\DiscountProcessor">
+            <argument type="service" id="cart.price.percentage_calculator" />
+            <argument type="service" id="cart.price.calculator" />
+            <argument type="service" id="cart.tax.percentage_rule_builder" />
+            <tag name="cart.processor" />
+        </service>
+    </services>
+</container>

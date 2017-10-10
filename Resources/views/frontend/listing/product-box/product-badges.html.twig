@@ -1,0 +1,15 @@
+{% sw_extends "@Shopware/frontend/listing/product-box/product-badges.html.twig" %}
+
+{# @var product \Shopware\Storefront\Bridge\Product\Struct\ListingProductStruct #}
+
+{% block frontend_listing_box_article_badges %}
+    {{ parent() }}
+    <div class="swag-product-discount" style="height: 30px; width: 100%;">
+        {% if (product.attribute('discount').get('percentage')) %}
+            <span style="background-color: #2ca02c; padding: 5px; color: #fff; border-radius: 3px; float: right;">
+                {{ product.attribute('discount').get('percentage')|number_format(2) }} % sparen
+            </span>
+            <br style="clear: both;">
+        {% endif %}
+    </div>
+{% endblock %}
