@@ -51,8 +51,12 @@ class DiscountCollector implements CollectorInterface
         $numbers = [];
         /** @var Collection $definitions */
         /** @var ProductFetchDefinition $definition */
-        foreach ($definitions as $definition) {
-            $numbers = array_merge($numbers, $definition->getNumbers());
+        foreach ($definitions as $key => $definition) {
+            foreach ($definition->getNumbers() as $number) {
+                if (!in_array($number, $numbers)) {
+                    $numbers[] = $number;
+                }
+            }
         }
 
         $criteria = new Criteria();
