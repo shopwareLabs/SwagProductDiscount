@@ -35,7 +35,7 @@ class SwagProductDiscountTranslationWriteResource extends WriteResource
         ];
     }
 
-    public static function createWrittenEvent(array $updates, TranslationContext $context, array $errors = []): SwagProductDiscountTranslationWrittenEvent
+    public static function createWrittenEvent(array $updates, TranslationContext $context, array $rawData = [], array $errors = []): SwagProductDiscountTranslationWrittenEvent
     {
         $event = new SwagProductDiscountTranslationWrittenEvent($updates[self::class] ?? [], $context, $errors);
 

@@ -82,7 +82,7 @@ class DiscountProcessor implements CartProcessorInterface
                 new Discount(
                     'discount_' . $product->getIdentifier(),
                     $price,
-                    $discount->getName()
+                    'Rabatt für ' . $product->getIdentifier()
                 )
             );
         }
