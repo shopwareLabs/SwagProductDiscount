@@ -7,18 +7,18 @@ Shopware.ComponentFactory.override('core-product-detail', {
     ],
 
     data() {
-       return {
-           product: {
-               attributes: {
-                   discount: {}
-               }
-           },
-           discount: {
-               uuid: null,
-               discountPercentage: null,
-               productDetailUuid: null
-           }
-       };
+        return {
+            product: {
+                attributes: {
+                    discount: {}
+                }
+            },
+            discount: {
+                uuid: null,
+                discountPercentage: null,
+                productDetailUuid: null
+            }
+        };
     },
 
     mounted() {
@@ -31,20 +31,20 @@ Shopware.ComponentFactory.override('core-product-detail', {
 
     computed: {
         productDiscount: {
-            get: function() {
-                if(this.discount && this.discount.discountPercentage) {
+            get() {
+                if (this.discount && this.discount.discountPercentage) {
                     return this.discount.discountPercentage;
                 }
                 return null;
             },
-            set: function(newValue) {
-                if(this.discount && this.discount.uuid) {
+            set(newValue) {
+                if (this.discount && this.discount.uuid) {
                     this.discount.discountPercentage = newValue;
                 } else {
                     this.discount = {
                         productDetailUuid: this.product.mainDetailUuid,
                         discountPercentage: newValue
-                    }
+                    };
                 }
             }
         }
@@ -56,9 +56,9 @@ Shopware.ComponentFactory.override('core-product-detail', {
             this.getProductDiscountData(product.mainDetailUuid);
         },
 
-        productSaveAfter(component)  {
+        productSaveAfter() {
             // console.log(this.discount);
-            this.updateDiscount(this.discount)
+            this.updateDiscount(this.discount);
         },
 
         getProductDiscountData(productDetailUuid) {
