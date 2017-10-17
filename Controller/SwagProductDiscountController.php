@@ -126,7 +126,7 @@ class SwagProductDiscountController extends ApiController
         );
 
         $swagProductDiscounts = $this->swagProductDiscountRepository->read(
-            $createEvent->getSwagProductDiscountUuids(),
+            $createEvent->getSwagProductDiscountUuids()['uuid'],
             $context->getShopContext()->getTranslationContext()
         );
 

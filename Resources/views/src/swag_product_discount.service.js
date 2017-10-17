@@ -26,7 +26,7 @@ export default function SwagProductDiscountService(client) {
     }
     function update(payload) {
         const url = `swagProductDiscount.${returnFormat}`;
-        return client.patch(url, payload).then((response) => {
+        return client.put(url, payload).then((response) => {
             return response.data;
         });
     }
