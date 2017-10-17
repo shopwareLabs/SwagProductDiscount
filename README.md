@@ -1,5 +1,6 @@
 Note: This plugin only works with the [labs branch](https://github.com/shopware/shopware/tree/labs).
 
+
 1. Refresh the plugin list: `bin/console plugin:update`
 2. Install and activate the plugin:
 `bin/console plugin:install SwagProductDiscount --activate`
