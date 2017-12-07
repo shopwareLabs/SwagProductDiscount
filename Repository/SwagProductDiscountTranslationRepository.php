@@ -13,18 +13,18 @@ use Shopware\Api\Write\EntityWriterInterface;
 use Shopware\Api\Write\WriteContext;
 use Shopware\Api\Write\GenericWrittenEvent;
 use Shopware\Context\Struct\TranslationContext;
-use SwagProductDiscount\Event\SwagProductDiscount\SwagProductDiscountSearchResultLoadedEvent;
-use SwagProductDiscount\Event\SwagProductDiscount\SwagProductDiscountBasicLoadedEvent;
-use SwagProductDiscount\Event\SwagProductDiscount\SwagProductDiscountAggregationResultLoadedEvent;
-use SwagProductDiscount\Event\SwagProductDiscount\SwagProductDiscountUuidSearchResultLoadedEvent;
-use SwagProductDiscount\Struct\SwagProductDiscountSearchResult;
-use SwagProductDiscount\Definition\SwagProductDiscountDefinition;
-use SwagProductDiscount\Collection\SwagProductDiscountBasicCollection;
+use SwagProductDiscount\Event\SwagProductDiscountTranslation\SwagProductDiscountTranslationSearchResultLoadedEvent;
+use SwagProductDiscount\Event\SwagProductDiscountTranslation\SwagProductDiscountTranslationBasicLoadedEvent;
+use SwagProductDiscount\Event\SwagProductDiscountTranslation\SwagProductDiscountTranslationAggregationResultLoadedEvent;
+use SwagProductDiscount\Event\SwagProductDiscountTranslation\SwagProductDiscountTranslationUuidSearchResultLoadedEvent;
+use SwagProductDiscount\Struct\SwagProductDiscountTranslationSearchResult;
+use SwagProductDiscount\Definition\SwagProductDiscountTranslationDefinition;
+use SwagProductDiscount\Collection\SwagProductDiscountTranslationBasicCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use SwagProductDiscount\Collection\SwagProductDiscountDetailCollection;
-use SwagProductDiscount\Event\SwagProductDiscount\SwagProductDiscountDetailLoadedEvent;
+use SwagProductDiscount\Collection\SwagProductDiscountTranslationDetailCollection;
+use SwagProductDiscount\Event\SwagProductDiscountTranslation\SwagProductDiscountTranslationDetailLoadedEvent;
 
-class SwagProductDiscountRepository implements RepositoryInterface
+class SwagProductDiscountTranslationRepository implements RepositoryInterface
 {
     /**
      * @var EntityReaderInterface
@@ -65,7 +65,7 @@ class SwagProductDiscountRepository implements RepositoryInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function search(Criteria $criteria, TranslationContext $context): SwagProductDiscountSearchResult
+    public function search(Criteria $criteria, TranslationContext $context): SwagProductDiscountTranslationSearchResult
     {
         $uuids = $this->searchUuids($criteria, $context);
 
@@ -76,9 +76,9 @@ class SwagProductDiscountRepository implements RepositoryInterface
             $aggregations = $this->aggregate($criteria, $context);
         }
 
-        $result = SwagProductDiscountSearchResult::createFromResults($uuids, $entities, $aggregations);
+        $result = SwagProductDiscountTranslationSearchResult::createFromResults($uuids, $entities, $aggregations);
 
-        $event = new SwagProductDiscountSearchResultLoadedEvent($result);
+        $event = new SwagProductDiscountTranslationSearchResultLoadedEvent($result);
         $this->eventDispatcher->dispatch($event->getName(), $event);
 
         return $result;
@@ -86,9 +86,9 @@ class SwagProductDiscountRepository implements RepositoryInterface
 
     public function aggregate(Criteria $criteria, TranslationContext $context): AggregationResult
     {
-        $result = $this->aggregator->aggregate(SwagProductDiscountDefinition::class, $criteria, $context);
+        $result = $this->aggregator->aggregate(SwagProductDiscountTranslationDefinition::class, $criteria, $context);
 
-        $event = new SwagProductDiscountAggregationResultLoadedEvent($result);
+        $event = new SwagProductDiscountTranslationAggregationResultLoadedEvent($result);
         $this->eventDispatcher->dispatch($event->getName(), $event);
 
         return $result;
@@ -96,32 +96,32 @@ class SwagProductDiscountRepository implements RepositoryInterface
 
     public function searchUuids(Criteria $criteria, TranslationContext $context): UuidSearchResult
     {
-        $result = $this->searcher->search(SwagProductDiscountDefinition::class, $criteria, $context);
+        $result = $this->searcher->search(SwagProductDiscountTranslationDefinition::class, $criteria, $context);
 
-        $event = new SwagProductDiscountUuidSearchResultLoadedEvent($result);
+        $event = new SwagProductDiscountTranslationUuidSearchResultLoadedEvent($result);
         $this->eventDispatcher->dispatch($event->getName(), $event);
 
         return $result;
     }
 
-    public function readBasic(array $uuids, TranslationContext $context): SwagProductDiscountBasicCollection
+    public function readBasic(array $uuids, TranslationContext $context): SwagProductDiscountTranslationBasicCollection
     {
-        /** @var SwagProductDiscountBasicCollection $entities */
-        $entities = $this->reader->readBasic(SwagProductDiscountDefinition::class, $uuids, $context);
+        /** @var SwagProductDiscountTranslationBasicCollection $entities */
+        $entities = $this->reader->readBasic(SwagProductDiscountTranslationDefinition::class, $uuids, $context);
 
-        $event = new SwagProductDiscountBasicLoadedEvent($entities, $context);
+        $event = new SwagProductDiscountTranslationBasicLoadedEvent($entities, $context);
         $this->eventDispatcher->dispatch($event->getName(), $event);
 
         return $entities;
     }
 
-    public function readDetail(array $uuids, TranslationContext $context): SwagProductDiscountDetailCollection
+    public function readDetail(array $uuids, TranslationContext $context): SwagProductDiscountTranslationDetailCollection
     {
 
-        /** @var SwagProductDiscountDetailCollection $entities */
-        $entities = $this->reader->readDetail(SwagProductDiscountDefinition::class, $uuids, $context);
+        /** @var SwagProductDiscountTranslationDetailCollection $entities */
+        $entities = $this->reader->readDetail(SwagProductDiscountTranslationDefinition::class, $uuids, $context);
 
-        $event = new SwagProductDiscountDetailLoadedEvent($entities, $context);
+        $event = new SwagProductDiscountTranslationDetailLoadedEvent($entities, $context);
         $this->eventDispatcher->dispatch($event->getName(), $event);
 
         return $entities;                
@@ -130,7 +130,7 @@ class SwagProductDiscountRepository implements RepositoryInterface
 
     public function update(array $data, TranslationContext $context): GenericWrittenEvent
     {
-        $affected = $this->writer->update(SwagProductDiscountDefinition::class, $data, WriteContext::createFromTranslationContext($context));
+        $affected = $this->writer->update(SwagProductDiscountTranslationDefinition::class, $data, WriteContext::createFromTranslationContext($context));
         $event = GenericWrittenEvent::createFromWriterResult($affected, $context, []);
         $this->eventDispatcher->dispatch(GenericWrittenEvent::NAME, $event);
 
@@ -139,7 +139,7 @@ class SwagProductDiscountRepository implements RepositoryInterface
 
     public function upsert(array $data, TranslationContext $context): GenericWrittenEvent
     {
-        $affected = $this->writer->upsert(SwagProductDiscountDefinition::class, $data, WriteContext::createFromTranslationContext($context));
+        $affected = $this->writer->upsert(SwagProductDiscountTranslationDefinition::class, $data, WriteContext::createFromTranslationContext($context));
         $event = GenericWrittenEvent::createFromWriterResult($affected, $context, []);
         $this->eventDispatcher->dispatch(GenericWrittenEvent::NAME, $event);
 
@@ -148,7 +148,7 @@ class SwagProductDiscountRepository implements RepositoryInterface
 
     public function create(array $data, TranslationContext $context): GenericWrittenEvent
     {
-        $affected = $this->writer->insert(SwagProductDiscountDefinition::class, $data, WriteContext::createFromTranslationContext($context));
+        $affected = $this->writer->insert(SwagProductDiscountTranslationDefinition::class, $data, WriteContext::createFromTranslationContext($context));
         $event = GenericWrittenEvent::createFromWriterResult($affected, $context, []);
         $this->eventDispatcher->dispatch(GenericWrittenEvent::NAME, $event);
 

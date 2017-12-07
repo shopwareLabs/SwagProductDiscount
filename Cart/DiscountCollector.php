@@ -3,14 +3,14 @@
 namespace SwagProductDiscount\Cart;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Cart\Cart\CartContainer;
+use Shopware\Api\Search\Criteria;
+use Shopware\Api\Search\Query\TermsQuery;
 use Shopware\Cart\Cart\CollectorInterface;
-use Shopware\Cart\Product\ProductFetchDefinition;
+use Shopware\Cart\Cart\Struct\CartContainer;
+use Shopware\CartBridge\Product\Struct\ProductFetchDefinition;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Struct\Collection;
 use Shopware\Framework\Struct\StructCollection;
-use Shopware\Search\Criteria;
-use Shopware\Search\Query\TermsQuery;
 use SwagProductDiscount\Repository\SwagProductDiscountRepository;
 
 class DiscountCollector implements CollectorInterface
@@ -60,9 +60,9 @@ class DiscountCollector implements CollectorInterface
         }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new TermsQuery('swag_product_discount.productDetailUuid', $numbers));
+        $criteria->addFilter(new TermsQuery('swag_product_discount.productUuid', $numbers));
         $discounts = $this->repository->search($criteria, $context->getTranslationContext());
-
+        
         $dataCollection->add($discounts, 'product_discounts');
     }
 }

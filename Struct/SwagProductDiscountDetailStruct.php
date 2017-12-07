@@ -2,23 +2,49 @@
 
 namespace SwagProductDiscount\Struct;
 
-use Shopware\ProductDetail\Struct\ProductDetailBasicStruct;
+use Shopware\Product\Struct\ProductBasicStruct;
+use SwagProductDiscount\Collection\SwagProductDiscountTranslationBasicCollection;
 
 class SwagProductDiscountDetailStruct extends SwagProductDiscountBasicStruct
 {
+
     /**
-     * @var ProductDetailBasicStruct
+     * @var ProductBasicStruct
      */
-    protected $product_detail;
-    //constructor#
+    protected $product;
 
-    public function getProduct_detail(): ProductDetailBasicStruct
+    /**
+     * @var SwagProductDiscountTranslationBasicCollection
+     */
+    protected $translations;
+
+    public function __construct()
     {
-        return $this->product_detail;
+
+        $this->translations = new SwagProductDiscountTranslationBasicCollection();
+
     }
 
-    public function setProduct_detail(ProductDetailBasicStruct $product_detail): void
+
+    public function getProduct(): ProductBasicStruct
     {
-        $this->product_detail = $product_detail;
+        return $this->product;
     }
+
+    public function setProduct(ProductBasicStruct $product): void
+    {
+        $this->product = $product;
+    }
+
+
+    public function getTranslations(): SwagProductDiscountTranslationBasicCollection
+    {
+        return $this->translations;
+    }
+
+    public function setTranslations(SwagProductDiscountTranslationBasicCollection $translations): void
+    {
+        $this->translations = $translations;
+    }
+
 }

@@ -2,19 +2,19 @@
 
 namespace SwagProductDiscount\Cart;
 
-use Shopware\Cart\Cart\CartContainer;
 use Shopware\Cart\Cart\CartProcessorInterface;
-use Shopware\Cart\Cart\ProcessorCart;
+use Shopware\Cart\Cart\Struct\CalculatedCart;
+use Shopware\Cart\Cart\Struct\CartContainer;
+use Shopware\Cart\LineItem\CalculatedLineItem;
 use Shopware\Cart\LineItem\CalculatedLineItemCollection;
-use Shopware\Cart\LineItem\Discount;
 use Shopware\Cart\Price\PercentagePriceCalculator;
 use Shopware\Cart\Price\PriceCalculator;
-use Shopware\Cart\Price\PriceCollection;
-use Shopware\Cart\Product\CalculatedProduct;
+use Shopware\Cart\Price\Struct\PriceCollection;
 use Shopware\Cart\Tax\PercentageTaxRuleBuilder;
+use Shopware\CartBridge\Product\Struct\CalculatedProduct;
 use Shopware\Context\Struct\ShopContext;
 use Shopware\Framework\Struct\StructCollection;
-use SwagProductDiscount\Struct\SwagProductDiscountBasicCollection;
+use SwagProductDiscount\Collection\SwagProductDiscountBasicCollection;
 use SwagProductDiscount\Struct\SwagProductDiscountBasicStruct;
 
 class DiscountProcessor implements CartProcessorInterface
@@ -51,12 +51,13 @@ class DiscountProcessor implements CartProcessorInterface
 
     public function process(
         CartContainer $cartContainer,
-        ProcessorCart $processorCart,
+        CalculatedCart $calculatedCart,
         StructCollection $dataCollection,
         ShopContext $context
     ): void {
         /** @var CalculatedLineItemCollection $products */
-        $products = $processorCart->getCalculatedLineItems()->filterInstance(
+
+        $products = $calculatedCart->getCalculatedLineItems()->filterInstance(
             CalculatedProduct::class
         );
 
@@ -65,7 +66,7 @@ class DiscountProcessor implements CartProcessorInterface
 
         /** @var CalculatedProduct $product */
         foreach ($products as $product) {
-            $discount = $discounts->filterByProductDetailUuid($product->getIdentifier())->first();
+            $discount = $discounts->filterByProductUuid($product->getIdentifier())->first();
 
             if (!$discount) {
                 continue;
@@ -78,11 +79,13 @@ class DiscountProcessor implements CartProcessorInterface
                 $context
             );
 
-            $processorCart->getCalculatedLineItems()->add(
-                new Discount(
-                    'discount_' . $product->getIdentifier(),
+            $calculatedCart->getCalculatedLineItems()->add(
+                new CalculatedLineItem(
+                    'swag_discount_' . $product->getIdentifier(),
                     $price,
-                    'Rabatt für ' . $product->getIdentifier()
+                    1,
+                    'swag_discount',
+                    $discount->getName()
                 )
             );
         }

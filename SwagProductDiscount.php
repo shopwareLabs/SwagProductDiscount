@@ -27,8 +27,7 @@ class SwagProductDiscount extends Plugin
         parent::build($container);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection/'));
-        $loader->load('write-resources.xml');
-        $loader->load('read-services.xml');
+        $loader->load('api.xml');
         $loader->load('services.xml');
     }
 
@@ -39,10 +38,10 @@ class SwagProductDiscount extends Plugin
         $sql = <<<SQL
 CREATE TABLE `swag_product_discount` (
     `uuid` varchar(42) COLLATE 'utf8mb4_unicode_ci' NOT NULL,
-    `product_detail_uuid` VARCHAR(42) NOT NULL UNIQUE,
+    `product_uuid` VARCHAR(42) NOT NULL UNIQUE,
     `discount_percentage` DOUBLE NOT NULL DEFAULT 0,
     PRIMARY KEY `uuid` (`uuid`),
-    FOREIGN KEY (`product_detail_uuid`) REFERENCES product_detail (`uuid`)
+    FOREIGN KEY (`product_uuid`) REFERENCES product (`uuid`)
 );
 
 CREATE TABLE `swag_product_discount_translation` (

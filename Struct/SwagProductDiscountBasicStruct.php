@@ -2,49 +2,50 @@
 
 namespace SwagProductDiscount\Struct;
 
-use Shopware\Framework\Struct\Struct;
+use Shopware\Api\Entity\Entity;
 
-class SwagProductDiscountBasicStruct extends Struct
+
+
+class SwagProductDiscountBasicStruct extends Entity
 {
-    /**
-     * @var string
-     */
-    protected $uuid;
 
     /**
      * @var string
      */
-    protected $productDetailUuid;
-
-    /**
-     * @var float
-     */
-    protected $discountPercentage;
+    protected $productUuid;
 
     /**
      * @var string
      */
     protected $name;
 
-    public function getUuid(): string
+    /**
+     * @var float
+     */
+    protected $discountPercentage;
+
+
+    public function getProductUuid(): string
     {
-        return $this->uuid;
+        return $this->productUuid;
     }
 
-    public function setUuid(string $uuid): void
+    public function setProductUuid(string $productUuid): void
     {
-        $this->uuid = $uuid;
+        $this->productUuid = $productUuid;
     }
 
-    public function getProductDetailUuid(): string
+
+    public function getName(): string
     {
-        return $this->productDetailUuid;
+        return $this->name;
     }
 
-    public function setProductDetailUuid(string $productDetailUuid): void
+    public function setName(string $name): void
     {
-        $this->productDetailUuid = $productDetailUuid;
+        $this->name = $name;
     }
+
 
     public function getDiscountPercentage(): float
     {
@@ -56,13 +57,4 @@ class SwagProductDiscountBasicStruct extends Struct
         $this->discountPercentage = $discountPercentage;
     }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
 }
